@@ -3,18 +3,35 @@ import Head from "next/head";
 
 import FrameGrid, { FrameGridContent, FrameGridCoordinates } from "../lib/FrameGrid";
 
-const cellGenerator = (props: FrameGridCoordinates): FrameGridContent => {
+const cellType = (props: FrameGridCoordinates): string => {
   const { q, r, s } = props;
 
   if (q == 0 && r == 0 && s == 0) {
-    return ({
-      className: "reactor",
-      text: "reactor"
-    })
+    return "reactor";
   }
+
+  if (q == 0) {
+    return (r < 0) ? "protection" : "movement";
+  }
+
+  if (r == 0) {
+    return (q < 0) ? "control" : "utility";
+  }
+
+  if (s == 0) {
+    return (r < 0) ? "destruction" : "spectacle"
+  }
+
+  return "free"
+}
+
+const cellGenerator = (props: FrameGridCoordinates): FrameGridContent => {
+  const { q, r, s } = props;
+
+  const className = cellType(props)
   return ({
-    className: "",
-    text: "WF!"
+    className: className,
+    text: className.substring(0, 4)
   })
 }
 
